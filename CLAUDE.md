@@ -118,13 +118,14 @@ npm run lint
 | `mint` | `#8FD9C4` | サブ |
 | `accent` | `#FFD66B` | アクセント |
 | `ink` | `#3A3A4A` | 本文テキスト |
-| `ink-sub` | `#8A8A99` | 補助テキスト |
+| `ink-sub` | `#6E6E7E` | 補助テキスト |
 | `stock-in` | `#4CC7A2` | 在庫あり |
 | `stock-low` | `#F5B83D` | 残りわずか |
 | `stock-out` | `#C4C4CC` | 在庫なし |
 
 ### ルール
 - 淡い色（primary / lavender / mint / accent）は背景・装飾に使い、**文字色には使わない**
+- 淡い色・在庫色の上に載せる文字は `ink` にする（白文字はコントラスト不足）
 - 文字と背景のコントラスト比は 4.5:1 以上
 - 角丸：カード `16px`、ボタンはピル型
 - 余白は 8px グリッド
@@ -189,4 +190,5 @@ npm run lint
 - Cloudflare Pages へのデプロイ：済（https://number-i-release.pages.dev/ 、GitHub 連携で `main` への push 時に自動デプロイ）
   - ビルド設定：コマンド `npm run build`、出力 `apps/web/dist`、ルートはリポジトリ直下、`NODE_VERSION=22`
   - API（Workers）は未デプロイ。本番での `/api` の接続方法は API 実装時に決める
-- 次のタスク：デザイントークン定義 → 共通コンポーネント → D1 スキーマ
+- デザイントークン定義：済（`apps/web/tailwind.config.ts`）
+- 次のタスク：共通コンポーネント → D1 スキーマ

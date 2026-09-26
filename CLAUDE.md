@@ -185,4 +185,8 @@ npm run lint
 - 対象リリースは未定。今後のために先行して開発中
 - 現在：ロードマップ **Step 1（土台）** に着手
 - 雛形作成：済
-- 次のタスク：Cloudflare Pages へのデプロイ → デザイントークン定義 → 共通コンポーネント → D1 スキーマ
+- GitHub：https://github.com/emu-allforsho/release（`main`）
+- Cloudflare Pages へのデプロイ：済（https://number-i-release.pages.dev/ 、GitHub 連携で `main` への push 時に自動デプロイ）
+  - ビルド設定：コマンド `npm run build`、出力 `apps/web/dist`、ルートはリポジトリ直下、`NODE_VERSION=22`
+  - API（Workers）は未デプロイ。本番での `/api` の接続方法は API 実装時に決める
+- 次のタスク：デザイントークン定義 → 共通コンポーネント → D1 スキーマ

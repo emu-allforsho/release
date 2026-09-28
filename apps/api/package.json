@@ -10,7 +10,8 @@
     "db:seed": "wrangler d1 execute number-i-release --local --file src/db/seed/dev.sql"
   },
   "dependencies": {
-    "hono": "^4.0.0"
+    "hono": "^4.0.0",
+    "shared": "*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.0.0",

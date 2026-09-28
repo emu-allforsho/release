@@ -54,6 +54,8 @@ Number_i のリリース応援 Web アプリ（非公式ファンサイト）の
 │       │       ├── migrations/ # D1 スキーマ
 │       │       └── seed/       # テストデータ
 │       └── wrangler.toml
+├── packages/
+│   └── shared/                 # web と api で共有する API の型（型のみ）
 ├── docs/
 │   └── plan.md                 # 企画書
 └── CLAUDE.md
@@ -92,7 +94,7 @@ npm run lint
 - React は関数コンポーネント + Hooks
 - ファイル名：コンポーネントは `PascalCase.tsx`、それ以外は `camelCase.ts`
 - 1コンポーネント1ファイル。200行を超えたら分割を検討
-- API のレスポンス型は `apps/web` と `apps/api` で共有する型定義を使う
+- API のレスポンス型は `apps/web` と `apps/api` で共有する型定義（`packages/shared`、`import type { … } from 'shared'`）を使う
 - コメントは「なぜそうしたか」を日本語で書く
 - 変更は小さく分けて行い、1回の作業で複数の機能をまたがない
 

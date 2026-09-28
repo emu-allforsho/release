@@ -2,12 +2,12 @@ import {
   BookOpen,
   CalendarDays,
   CirclePlay,
-  Disc3,
   Gift,
   Headphones,
   House,
   Info,
   MessageCircle,
+  ShoppingCart,
   Store,
   type LucideIcon,
 } from 'lucide-react'
@@ -23,7 +23,8 @@ export const pages = {
   home: { path: '/', label: 'ホーム', icon: House },
   listen: { path: '/listen', label: '聴く', icon: Headphones },
   mv: { path: '/mv', label: 'MV', icon: CirclePlay },
-  cd: { path: '/cd', label: 'CD', icon: Disc3 },
+  // 「通販」はネットで買う場所、「お店」は実店舗。どこで買うかで分ける（docs/plan.md 3章）
+  cd: { path: '/cd', label: '通販', icon: ShoppingCart },
   shops: { path: '/shops', label: 'お店', icon: Store },
   campaigns: { path: '/campaigns', label: 'キャンペーン', icon: Gift },
   guide: { path: '/guide', label: '応援ガイド', icon: BookOpen },
@@ -32,7 +33,7 @@ export const pages = {
   about: { path: '/about', label: 'サイトについて', icon: Info },
 } satisfies Record<string, NavItem>
 
-// 下部ナビは片手で届く数に絞り、トップページの「クイックリンク」と同じ4つにする
-export const bottomNavItems: NavItem[] = [pages.home, pages.listen, pages.shops, pages.campaigns]
+// 下部ナビは片手で届く数に絞る。「どこで買うか」を探す通販・お店を並べて置く（聴くはメニューから）
+export const bottomNavItems: NavItem[] = [pages.home, pages.cd, pages.shops, pages.campaigns]
 
 export const menuItems: NavItem[] = Object.values(pages)

@@ -192,5 +192,6 @@ npm run lint
 - デザイントークン定義：済（`apps/web/tailwind.config.ts`）
 - 共通コンポーネント第1弾：済（Button / Card / SectionHeading / LinkCard / Countdown / StockBadge / FreshnessLabel。確認ページは開発サーバーの `/dev/components`）
 - 共通コンポーネント第2弾：済（Header / BottomNav / MenuSheet / Layout。`lucide-react`・`react-router` を導入。ページ一覧は `apps/web/src/lib/navigation.ts`）
-- D1 スキーマ：ローカルのみ済（`apps/api/src/db/migrations/0001_initial.sql`、定義は `docs/plan.md` 6章）。本番の D1 は `wrangler login` 後に作成し、`wrangler.toml` に `database_id` を追記する
-- 次のタスク：本番 D1 の作成 → 過去作のテストデータ（`apps/api/src/db/seed/`）
+- D1 スキーマ：済（`apps/api/src/db/migrations/0001_initial.sql`、定義は `docs/plan.md` 6章）。本番 D1 `number-i-release`（APAC）にも適用済み
+  - 本番への適用：`cd apps/api && npx wrangler d1 migrations apply number-i-release --remote`
+- 次のタスク：過去作のテストデータ（`apps/api/src/db/seed/`）

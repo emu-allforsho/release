@@ -2,11 +2,11 @@ name = "number-i-release-api"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
 
-# 本番の D1 はまだ作成していない（wrangler login が必要）。
-# 作成したら `npx wrangler d1 create number-i-release` で表示された database_id をここに追記する
+# 本番の D1（2026-09-28 作成、リージョン APAC）。database_id は秘密情報ではないのでコミットしてよい
 [[d1_databases]]
 binding = "DB"
 database_name = "number-i-release"
+database_id = "5f498bb5-1787-408b-b2df-cb2c39208e1a"
 migrations_dir = "src/db/migrations"
 
 # MV 再生回数の定期取得で使う予定

@@ -2,12 +2,12 @@ name = "number-i-release-api"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
 
-# D1 は Step 1 の最後（スキーマ作成時）に作成して有効化する
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "number-i-release"
-# database_id = "<wrangler d1 create で表示された ID>"
-# migrations_dir = "src/db/migrations"
+# 本番の D1 はまだ作成していない（wrangler login が必要）。
+# 作成したら `npx wrangler d1 create number-i-release` で表示された database_id をここに追記する
+[[d1_databases]]
+binding = "DB"
+database_name = "number-i-release"
+migrations_dir = "src/db/migrations"
 
 # MV 再生回数の定期取得で使う予定
 # [triggers]

@@ -107,7 +107,7 @@ Number_iの新作リリース時に、ファンが **気軽に・楽しく応援
 「通販」と「お店」は **どこで買うか** で分ける（2026-09-28 決定）。
 - 通販（`/cd`）：ネットで買う場所。公式ストア・EC サイトへのリンクと、通販・実店舗の特典をまとめた比較表
 - お店（`/shops`）：実店舗。場所・在庫を探す。店舗詳細にもその店の特典を表示する
-- 通販サイトの特典を持たせるため、`links` に特典の列が必要（D1 スキーマ作成時に確認のうえ追加）
+- 特典は `benefits` テーブルにチェーン・通販サイト単位で登録し、通販の比較表と店舗詳細の両方で使う（6.6）
 
 ### 3.1 トップページのレイアウト（スマホ基準）
 1. ヘッダー（サイト名）※メニューは片手で押せるよう、画面下の固定ナビ（ホーム / 通販 / お店 / キャンペーン / メニュー）に置く
@@ -201,70 +201,127 @@ number_i-support/
 
 ---
 
-## 6. データ設計（案）
+## 6. データ設計
 
-### 6.1 stores（店舗）
+2026-09-28 に確定（当初案から、リリース管理・特典・形態・カウントダウンの扱いを見直した）。
+
+### 共通ルール
+- ID は TEXT。日時は ISO 8601（UTC）の TEXT で保存し、表示時に日本時間へ変換する
+- 真偽値は INTEGER（0 / 1）
+- **リリースに属するデータは `release_id` を持つ**。店舗（`stores`）だけはリリース共通
+- 表示中のリリースは `site_settings.current_release_id` で決める
+- 削除は `is_hidden = 1` で行い、物理削除しない
+- 管理者が編集するテーブルは `created_at` / `updated_at` を持つ
+- P2 以降の機能（チャット・Push 通知・追認・店舗の追加申請・出演スケジュール）のテーブルは、着手時にマイグレーションを追加する
+
+### 6.1 releases（リリース）
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | TEXT | リリースID |
+| title | TEXT | タイトル |
+| release_at | TEXT | 発売日時（カウントダウンに使う） |
+| official_url | TEXT | 公式ページURL（ジャケット画像は保存せず、ここへのリンクのみ） |
+| mv_video_id | TEXT | 公式MVの YouTube 動画ID（任意） |
+
+### 6.2 site_settings（サイト設定）
+1行だけのテーブル（`id = 1` 固定）。
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | INTEGER | 常に 1 |
+| current_release_id | TEXT | 表示中のリリース |
+
+### 6.3 editions（形態）
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | TEXT | 形態ID |
+| release_id | TEXT | リリースID |
+| name | TEXT | 初回A / 初回B / 通常盤 など（リリース内で重複不可） |
+| sort_order | INTEGER | 表示順 |
+
+### 6.4 deadlines（カウントダウン）
+チャート集計締切など。集計ルールに触れるため公式ページURLを必須にする。
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | TEXT | ID |
+| release_id | TEXT | リリースID |
+| label | TEXT | 例：オリコン週間集計締切 |
+| deadline_at | TEXT | 締切日時 |
+| url | TEXT | 公式ページURL（必須） |
+| sort_order | INTEGER | 表示順 |
+| is_hidden | INTEGER | 非表示か |
+
+### 6.5 stores（店舗）※リリース共通
 | カラム | 型 | 説明 |
 |---|---|---|
 | id | TEXT | 店舗ID |
 | name | TEXT | 店舗名 |
-| chain | TEXT | チェーン名 |
+| chain | TEXT | チェーン名（`benefits.seller` と対応。個人店は空） |
+| prefecture | TEXT | 都道府県（位置情報が使えないときの絞り込み用） |
 | address | TEXT | 住所 |
-| lat / lng | REAL | 緯度・経度 |
+| lat / lng | REAL | 緯度・経度（未登録なら空） |
 | is_billboard | INTEGER | Billboard加盟店か |
 | is_oricon | INTEGER | オリコン加盟店か |
 | sns_x | TEXT | XのURL |
 | sns_instagram | TEXT | InstagramのURL |
-| benefit | TEXT | 購入特典 |
 | hours | TEXT | 営業時間 |
+| is_hidden | INTEGER | 非表示か |
 
-### 6.2 stock_reports（在庫報告）
-| カラム | 型 | 説明 |
-|---|---|---|
-| id | TEXT | 報告ID |
-| store_id | TEXT | 店舗ID |
-| edition | TEXT | 形態（初回A / 初回B / 通常盤など） |
-| status | TEXT | `in_stock` / `out` |
-| comment | TEXT | 短いコメント（文字数制限あり） |
-| nickname | TEXT | 匿名ニックネーム |
-| confirm_count | INTEGER | 追認数 |
-| created_at | TEXT | 報告日時 |
-
-### 6.3 campaigns（キャンペーン）
-| カラム | 型 | 説明 |
-|---|---|---|
-| id | TEXT | キャンペーンID |
-| title | TEXT | タイトル |
-| description | TEXT | 内容・応募条件 |
-| url | TEXT | 公式ページURL |
-| start_at | TEXT | 開始日時 |
-| deadline_at | TEXT | 締切日時 |
-
-### 6.4 links（リンク集）
+### 6.6 benefits（購入特典）
+チェーン・通販サイト単位で登録する（2026-09-28 決定。店舗ごとの違いは扱わない）。特典比較表と店舗詳細の両方で使う。
 | カラム | 型 | 説明 |
 |---|---|---|
 | id | TEXT | ID |
+| release_id | TEXT | リリースID |
+| seller | TEXT | チェーン名または通販サイト名（`stores.chain` / `links.platform` と同じ表記） |
+| description | TEXT | 特典の内容 |
+| sort_order | INTEGER | 表示順 |
+| is_hidden | INTEGER | 非表示か |
+
+### 6.7 links（リンク集）
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | TEXT | ID |
+| release_id | TEXT | リリースID |
 | category | TEXT | `streaming` / `download` / `cd` |
-| platform | TEXT | サービス名 |
+| platform | TEXT | サービス名（ロゴの対応づけにも使う） |
 | url | TEXT | URL |
 | sort_order | INTEGER | 表示順 |
+| is_hidden | INTEGER | 非表示か |
 
-### 6.5 mv_stats（MV再生回数）
+### 6.8 campaigns（キャンペーン）
 | カラム | 型 | 説明 |
 |---|---|---|
-| video_id | TEXT | YouTube動画ID |
+| id | TEXT | キャンペーンID |
+| release_id | TEXT | リリースID |
+| title | TEXT | タイトル |
+| description | TEXT | 内容・応募条件 |
+| url | TEXT | 公式ページURL |
+| start_at | TEXT | 開始日時（任意） |
+| deadline_at | TEXT | 締切日時 |
+| is_hidden | INTEGER | 非表示か |
+
+### 6.9 stock_reports（在庫報告）
+ユーザーの投稿なので `updated_at` は持たない。コメントの文字数上限は API 実装時に決め、サーバー側で検証する。
+| カラム | 型 | 説明 |
+|---|---|---|
+| id | TEXT | 報告ID |
+| release_id | TEXT | リリースID |
+| store_id | TEXT | 店舗ID |
+| edition_id | TEXT | 形態ID |
+| status | TEXT | `in_stock` / `out` |
+| comment | TEXT | 短いコメント（任意） |
+| nickname | TEXT | 匿名ニックネーム（任意） |
+| is_hidden | INTEGER | 通報等で非表示か |
+| report_count | INTEGER | 通報数 |
+| created_at | TEXT | 報告日時 |
+
+### 6.10 mv_stats（MV再生回数）
+最新の値だけを持ち、取得のたびに上書きする（推移グラフはやらないため履歴は持たない）。
+| カラム | 型 | 説明 |
+|---|---|---|
+| video_id | TEXT | YouTube動画ID（主キー） |
 | view_count | INTEGER | 再生回数 |
 | fetched_at | TEXT | 取得日時 |
-
-### 6.6 chat_messages（チャット）
-| カラム | 型 | 説明 |
-|---|---|---|
-| id | TEXT | メッセージID |
-| room | TEXT | ルーム（全体 / 地域別など） |
-| nickname | TEXT | 匿名ニックネーム |
-| body | TEXT | 本文 |
-| is_hidden | INTEGER | 通報等で非表示か |
-| created_at | TEXT | 投稿日時 |
 
 ---
 

@@ -191,4 +191,5 @@ npm run lint
   - API（Workers）は未デプロイ。本番での `/api` の接続方法は API 実装時に決める
 - デザイントークン定義：済（`apps/web/tailwind.config.ts`）
 - 共通コンポーネント第1弾：済（Button / Card / SectionHeading / LinkCard / Countdown / StockBadge / FreshnessLabel。確認ページは開発サーバーの `/dev/components`）
-- 次のタスク：共通コンポーネント第2弾（Header / BottomNav / Layout。`lucide-react`・`react-router` の導入可否を確認してから）→ D1 スキーマ
+- 共通コンポーネント第2弾：済（Header / BottomNav / MenuSheet / Layout。`lucide-react`・`react-router` を導入。ページ一覧は `apps/web/src/lib/navigation.ts`）
+- 次のタスク：D1 スキーマ

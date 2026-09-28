@@ -33,6 +33,10 @@ export default {
       spacing: {
         // タップ領域の最小サイズ。min-h-tap / min-w-tap で使う
         tap: '44px',
+        // iPhone のホームバーなど、画面下の操作できない領域（index.html の viewport-fit=cover が前提）
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        // 固定の下部ナビ（約 56px）に重ならないよう本文の下に空ける余白
+        'safe-nav': 'calc(4rem + env(safe-area-inset-bottom))',
       },
     },
   },

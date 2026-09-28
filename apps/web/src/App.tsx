@@ -1,26 +1,39 @@
 import { lazy, Suspense } from 'react'
-import Footer from './components/Footer'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import Layout from './components/Layout'
+import { pages } from './lib/navigation'
+import ComingSoonPage from './pages/ComingSoonPage'
+import HomePage from './pages/HomePage'
+import NotFoundPage from './pages/NotFoundPage'
 
 // import.meta.env.DEV は本番ビルドで false に置き換わるため、確認ページは本番に含まれない
 const DevComponentsPage = import.meta.env.DEV ? lazy(() => import('./pages/DevComponentsPage')) : null
 
-export default function App() {
-  // ルーター導入（共通コンポーネント第2弾）までの仮の分岐
-  const showDevPage = DevComponentsPage && window.location.pathname === '/dev/components'
+// まだ作っていないページ。完成したものから個別の Route に置き換えていく
+const comingSoonPages = Object.values(pages).filter(({ path }) => path !== pages.home.path)
 
+export default function App() {
   return (
-    <div className="flex min-h-dvh flex-col">
-      {showDevPage ? (
-        <Suspense>
-          <DevComponentsPage />
-        </Suspense>
-      ) : (
-        <main className="flex-1 px-4 py-8">
-          <h1 className="text-xl font-bold">Number_i リリース応援</h1>
-          <p className="mt-2 text-sm text-ink-sub">準備中です。</p>
-        </main>
-      )}
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<HomePage />} />
+          {comingSoonPages.map(({ path, label }) => (
+            <Route key={path} path={`${path}/*`} element={<ComingSoonPage title={label} />} />
+          ))}
+          {DevComponentsPage && (
+            <Route
+              path="/dev/components"
+              element={
+                <Suspense>
+                  <DevComponentsPage />
+                </Suspense>
+              }
+            />
+          )}
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }

@@ -9,7 +9,7 @@ Number_i のリリース応援 Web アプリ（非公式ファンサイト）の
 
 - Number_i の新作リリース時に、ファンが気軽に楽しく応援でき、必要な情報をすぐ手に入れられる Web アプリ
 - **複数リリース対応**：新作が出たらデータを追加するだけで立ち上げられる仕組みにする。1作品専用のコードは書かない
-- 開発中は過去作（4thシングルなど）をテストデータとして使う
+- 開発中は架空のダミーデータ（`apps/api/src/db/seed/dev.sql`、`npm run db:seed -w apps/api` でローカルに投入）を使う。過去作のデータは必要になったら追加する
 - 対象ユーザーはスマホ中心の国内ファン。UI の文言はすべて日本語
 
 ---
@@ -194,4 +194,5 @@ npm run lint
 - 共通コンポーネント第2弾：済（Header / BottomNav / MenuSheet / Layout。`lucide-react`・`react-router` を導入。ページ一覧は `apps/web/src/lib/navigation.ts`）
 - D1 スキーマ：済（`apps/api/src/db/migrations/0001_initial.sql`、定義は `docs/plan.md` 6章）。本番 D1 `number-i-release`（APAC）にも適用済み
   - 本番への適用：`cd apps/api && npx wrangler d1 migrations apply number-i-release --remote`
-- 次のタスク：過去作のテストデータ（`apps/api/src/db/seed/`）
+- **店舗・通販は後回し**（既存の在庫報告サイトとの役割分担が未定のため。`docs/plan.md` 10章）
+- 次のタスク：ホーム（テストデータ → API → ページ → MV 再生回数の順）

@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "wrangler d1 migrations apply number-i-release --local",
+    "db:seed": "wrangler d1 execute number-i-release --local --file src/db/seed/dev.sql"
   },
   "dependencies": {
     "hono": "^4.0.0"

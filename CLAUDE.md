@@ -119,8 +119,7 @@ npm run lint
 | `accent` | `#FFD66B` | アクセント |
 | `ink` | `#3A3A4A` | 本文テキスト |
 | `ink-sub` | `#6E6E7E` | 補助テキスト |
-| `stock-in` | `#4CC7A2` | 在庫あり |
-| `stock-low` | `#F5B83D` | 残りわずか |
+| `stock-in` | `#FFD66B` | 在庫あり |
 | `stock-out` | `#C4C4CC` | 在庫なし |
 
 ### ルール
@@ -130,7 +129,7 @@ npm run lint
 - 角丸：カード `16px`、ボタンはピル型
 - 余白は 8px グリッド
 - タップ領域は最小 44×44px
-- 見出しは丸ゴシック（Zen Maru Gothic）、本文は Noto Sans JP
+- フォントは見出し・本文とも M PLUS 1p
 - 数字（再生回数・カウントダウン）は大きく太く、等幅数字（`tabular-nums`）
 - アニメーションは控えめ。`prefers-reduced-motion` に対応する
 - 在庫状況は色だけで区別せず、必ずテキストやアイコンを併記する
@@ -191,4 +190,5 @@ npm run lint
   - ビルド設定：コマンド `npm run build`、出力 `apps/web/dist`、ルートはリポジトリ直下、`NODE_VERSION=22`
   - API（Workers）は未デプロイ。本番での `/api` の接続方法は API 実装時に決める
 - デザイントークン定義：済（`apps/web/tailwind.config.ts`）
-- 次のタスク：共通コンポーネント → D1 スキーマ
+- 共通コンポーネント第1弾：済（Button / Card / SectionHeading / LinkCard / Countdown / StockBadge / FreshnessLabel。確認ページは開発サーバーの `/dev/components`）
+- 次のタスク：共通コンポーネント第2弾（Header / BottomNav / Layout。`lucide-react`・`react-router` の導入可否を確認してから）→ D1 スキーマ

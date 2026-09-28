@@ -17,14 +17,12 @@ export default {
       ink: '#3A3A4A',
       // 企画書の当初案 #8A8A99 はコントラスト比 3.40 で基準未達のため濃くした
       'ink-sub': '#6E6E7E',
-      'stock-in': '#4CC7A2',
-      'stock-low': '#F5B83D',
+      'stock-in': '#FFD66B',
       'stock-out': '#C4C4CC',
     },
     fontFamily: {
-      // 本文をデフォルト（font-sans）にして、指定し忘れても本文フォントになるようにする
-      sans: ['"Noto Sans JP"', 'system-ui', 'sans-serif'],
-      heading: ['"Zen Maru Gothic"', '"Noto Sans JP"', 'system-ui', 'sans-serif'],
+      // 見出し・本文とも同じフォントなので、デフォルト（font-sans）だけを定義する
+      sans: ['"M PLUS 1p"', 'system-ui', 'sans-serif'],
     },
     extend: {
       borderRadius: {

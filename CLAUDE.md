@@ -175,6 +175,7 @@ npm run lint
 - 不自然なループ再生など、規約違反や集計除外につながる応援方法を推奨する文言を書かない
 - チャートの集計ルールに触れる文言には、公式ページへのリンクを添える
 - 開発用のダミー文言でもメンバーや関係者を揶揄する内容を書かない
+- 非営利で運営する。アフィリエイトリンク・紹介コード付きの URL・広告は入れない（`/about` に「運営者は利益を得ない」と明記しているため。リンクの URL にトラッキング用のパラメータを付けない）
 
 ---
 
@@ -203,7 +204,9 @@ npm run lint
 - D1 スキーマ：済（`apps/api/src/db/migrations/0001_initial.sql`、定義は `docs/plan.md` 6章）。本番 D1 `number-i-release`（APAC）にも適用済み
   - 本番への適用：`cd apps/api && npx wrangler d1 migrations apply number-i-release --remote`
 - **店舗・通販は後回し**（既存の在庫報告サイトとの役割分担が未定のため。`docs/plan.md` 10章）
-- ホーム：済（リリース情報・カウントダウン・配信/DL リンク・MV 埋め込み。API は `GET /api/home`）
-- MV 再生回数の定期取得：コードは済（`apps/api/src/cron/mvStats.ts`、10分ごと）。**未完了**：YouTube API キーの取得、Worker `number-i-release-api` の本番デプロイと `wrangler secret put YOUTUBE_API_KEY`
+- ホーム：済（リリース情報・カウントダウン（発売前→発売後→締切後で段階的に切り替え）・配信/DL リンク・MV 埋め込み。API は `GET /api/home`）
+- MV 再生回数の定期取得：済（`apps/api/src/cron/mvStats.ts`、10分ごと）。Worker `number-i-release-api` を本番デプロイ済み（公開 URL なし、Cron のみ）、`YOUTUBE_API_KEY` は `wrangler secret` に登録済み
+  - Worker の再デプロイ：`cd apps/api && npx wrangler deploy`（Pages と違い push では自動デプロイされない）
 - 本番 D1 にはまだリリースのデータがない（本番へのデータ投入方法・管理画面は未定）
-- 次のタスク：MV 再生回数の本番化 → キャンペーン一覧 / 応援ガイド / サイトについて
+- サイトについて（`/about`）：済。お問い合わせ窓口は未定で「準備中」。プライバシーの記載は今の実態のみなので、機能を足したら必ず更新する
+- 次のタスク：キャンペーン一覧 / 応援ガイド

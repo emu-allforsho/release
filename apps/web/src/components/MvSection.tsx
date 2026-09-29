@@ -2,6 +2,7 @@ import type { MvStats } from 'shared'
 import { useNow } from '../hooks/useNow'
 import { formatJst, formatRelative } from '../lib/datetime'
 import Card from './Card'
+import ExternalLink from './ExternalLink'
 import SectionHeading from './SectionHeading'
 
 type Props = {
@@ -49,15 +50,9 @@ export default function MvSection({ videoId, title, stats }: Props) {
         </Card>
       )}
 
-      <a
-        href={`https://www.youtube.com/watch?v=${id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex min-h-tap items-center text-sm font-bold underline underline-offset-4"
-      >
-        YouTube で見る<span aria-hidden="true"> ↗</span>
-        <span className="sr-only">（新しいタブで開きます）</span>
-      </a>
+      <ExternalLink href={`https://www.youtube.com/watch?v=${id}`} className="text-sm">
+        YouTube で見る
+      </ExternalLink>
     </section>
   )
 }

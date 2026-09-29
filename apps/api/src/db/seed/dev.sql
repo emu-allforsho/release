@@ -10,7 +10,8 @@ DELETE FROM releases WHERE id IN ('dev-current', 'dev-past');
 
 -- 表示中のリリース。発売は約9〜10日後の 0:00（日本時間）。UTC の日付から計算するので、投入した時刻で1日ずれる
 INSERT INTO releases (id, title, release_at, official_url, mv_video_id) VALUES
-  ('dev-current', 'テストシングル（架空）', strftime('%Y-%m-%dT15:00:00.000Z', 'now', '+9 days'), 'https://example.com/release', NULL),
+  -- MV は埋め込み確認のため実在の公式動画を使う（Number_i 公式チャンネル「DIGITAL GIRL (Visualizer)」）
+  ('dev-current', 'テストシングル（架空）', strftime('%Y-%m-%dT15:00:00.000Z', 'now', '+9 days'), 'https://example.com/release', 'cz9wgp-DU0A'),
   -- 複数リリースの切り替え確認用。site_settings で選ばれていないので表示されないはず
   ('dev-past', '過去のテスト作品（架空）', strftime('%Y-%m-%dT15:00:00.000Z', 'now', '-60 days'), 'https://example.com/past', NULL);
 

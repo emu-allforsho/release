@@ -1,6 +1,10 @@
 name = "number-i-release-api"
-main = "src/index.ts"
+# 入口は worker.ts（ローカルの API と本番の定期処理）。本番の API は Pages Functions が担当する
+main = "src/worker.ts"
 compatibility_date = "2026-09-01"
+# API は Pages（同じドメインの /api）で公開しているので、この Worker の公開 URL は作らない
+workers_dev = false
+preview_urls = false
 
 # 本番の D1（2026-09-28 作成、リージョン APAC）。database_id は秘密情報ではないのでコミットしてよい
 [[d1_databases]]
@@ -9,6 +13,6 @@ database_name = "number-i-release"
 database_id = "5f498bb5-1787-408b-b2df-cb2c39208e1a"
 migrations_dir = "src/db/migrations"
 
-# MV 再生回数の定期取得で使う予定
-# [triggers]
-# crons = ["0 * * * *"]
+# MV 再生回数の定期取得（企画書 7.1：10〜30分ごと）。10分ごとでも YouTube API の無料枠に収まる
+[triggers]
+crons = ["*/10 * * * *"]

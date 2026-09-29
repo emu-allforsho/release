@@ -1,10 +1,11 @@
 import Button from '../components/Button'
 import CountdownSection from '../components/CountdownSection'
+import MvSection from '../components/MvSection'
 import ReleaseCard from '../components/ReleaseCard'
 import ServiceLinkSection from '../components/ServiceLinkSection'
 import { useHome } from '../hooks/useHome'
 
-// トップページ（docs/plan.md 3.1）。MV・チェックリスト・新着在庫報告は別のステップで追加する
+// トップページ（docs/plan.md 3.1）。チェックリスト（P2）と新着在庫報告（店舗まわりは後回し）はまだ置かない
 export default function HomePage() {
   const { state, reload } = useHome()
 
@@ -44,6 +45,14 @@ export default function HomePage() {
             />
             <ServiceLinkSection id="listen" title="配信で聴く" links={state.data.links.streaming} />
             <ServiceLinkSection id="download" title="ダウンロードで買う" links={state.data.links.download} />
+            {/* MV 公開前は動画 ID が未登録なので出さない */}
+            {state.data.release.mvVideoId && (
+              <MvSection
+                videoId={state.data.release.mvVideoId}
+                title={state.data.release.title}
+                stats={state.data.mv}
+              />
+            )}
           </>
         )}
       </div>

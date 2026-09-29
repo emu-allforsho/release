@@ -191,16 +191,19 @@ npm run lint
 ## 現在の状況
 
 - 対象リリースは未定。今後のために先行して開発中
-- 現在：ロードマップ **Step 1（土台）** に着手
+- 現在：ロードマップ Phase 1（MVP）。土台は完了し、ページ作成に入っている
 - 雛形作成：済
 - GitHub：https://github.com/emu-allforsho/release（`main`）
 - Cloudflare Pages へのデプロイ：済（https://number-i-release.pages.dev/ 、GitHub 連携で `main` への push 時に自動デプロイ）
   - ビルド設定：コマンド `npm run build`、出力 `apps/web/dist`、ルートはリポジトリ直下、`NODE_VERSION=22`
-  - API（Workers）は未デプロイ。本番での `/api` の接続方法は API 実装時に決める
+  - API は Pages Functions（`functions/api/[[route]].ts`）で同じドメインの `/api/*` に公開済み。D1 は Pages の設定で `DB` として接続（Production）
 - デザイントークン定義：済（`apps/web/tailwind.config.ts`）
 - 共通コンポーネント第1弾：済（Button / Card / SectionHeading / LinkCard / Countdown / StockBadge / FreshnessLabel。確認ページは開発サーバーの `/dev/components`）
 - 共通コンポーネント第2弾：済（Header / BottomNav / MenuSheet / Layout。`lucide-react`・`react-router` を導入。ページ一覧は `apps/web/src/lib/navigation.ts`）
 - D1 スキーマ：済（`apps/api/src/db/migrations/0001_initial.sql`、定義は `docs/plan.md` 6章）。本番 D1 `number-i-release`（APAC）にも適用済み
   - 本番への適用：`cd apps/api && npx wrangler d1 migrations apply number-i-release --remote`
 - **店舗・通販は後回し**（既存の在庫報告サイトとの役割分担が未定のため。`docs/plan.md` 10章）
-- 次のタスク：ホーム（テストデータ → API → ページ → MV 再生回数の順）
+- ホーム：済（リリース情報・カウントダウン・配信/DL リンク・MV 埋め込み。API は `GET /api/home`）
+- MV 再生回数の定期取得：コードは済（`apps/api/src/cron/mvStats.ts`、10分ごと）。**未完了**：YouTube API キーの取得、Worker `number-i-release-api` の本番デプロイと `wrangler secret put YOUTUBE_API_KEY`
+- 本番 D1 にはまだリリースのデータがない（本番へのデータ投入方法・管理画面は未定）
+- 次のタスク：MV 再生回数の本番化 → キャンペーン一覧 / 応援ガイド / サイトについて

@@ -168,10 +168,10 @@ Number_iの新作リリース時に、ファンが **気軽に・楽しく応援
 | フロントエンド | Vite + React + TypeScript | 開発が軽く、PWA化もしやすい |
 | スタイリング | Tailwind CSS | デザイントークンを管理しやすい |
 | ホスティング | Cloudflare Pages | 無料枠が広く高速 |
-| API | Cloudflare Workers（Hono） | APIキーの秘匿・キャッシュ処理 |
+| API | Hono on Cloudflare Pages Functions | APIキーの秘匿・キャッシュ処理。サイトと同じドメインの `/api/*` で動かし CORS を不要にする（2026-09-29 決定） |
 | データベース | Cloudflare D1 | 店舗・報告・キャンペーンの管理 |
 | リアルタイム（チャット） | Durable Objects または Firebase | WebSocketによるリアルタイム通信 |
-| 定期処理 | Workers Cron Triggers | MV再生回数の定期取得 |
+| 定期処理 | Workers Cron Triggers | MV再生回数の定期取得。Pages Functions では Cron が動かないため別の Worker で行う |
 | 地図 | Leaflet + OpenStreetMap | 無料で使える |
 | 通知 | Web Push（VAPID） | キャンペーン期限通知 |
 

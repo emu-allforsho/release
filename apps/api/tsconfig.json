@@ -4,5 +4,6 @@
     "lib": ["ES2022"],
     "types": ["@cloudflare/workers-types"]
   },
-  "include": ["src"]
+  // Pages Functions の入口（リポジトリ直下の functions/）も同じ設定で型チェックする
+  "include": ["src", "../../functions"]
 }

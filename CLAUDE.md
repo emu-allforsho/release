@@ -21,9 +21,9 @@ Number_i のリリース応援 Web アプリ（非公式ファンサイト）の
 | フロントエンド | Vite + React + TypeScript |
 | スタイリング | Tailwind CSS |
 | ホスティング | Cloudflare Pages |
-| API | Cloudflare Workers + Hono |
+| API | Hono（本番は Cloudflare Pages Functions で同じドメインの `/api/*` に載せる） |
 | データベース | Cloudflare D1 |
-| 定期処理 | Workers Cron Triggers |
+| 定期処理 | Workers Cron Triggers（Pages Functions では動かないため別の Worker） |
 | 地図 | Leaflet + OpenStreetMap |
 | 通知 | Web Push（VAPID） |
 | パッケージ管理 | npm workspaces |
@@ -46,7 +46,7 @@ Number_i のリリース応援 Web アプリ（非公式ファンサイト）の
 │   │       ├── lib/            # API クライアント・ユーティリティ
 │   │       ├── styles/
 │   │       └── data/           # 開発用シードデータ
-│   └── api/                    # Cloudflare Workers
+│   └── api/                    # API（Hono）。本番は functions/ から呼ばれる
 │       ├── src/
 │       │   ├── routes/         # API エンドポイント
 │       │   ├── cron/           # 定期処理
@@ -54,6 +54,8 @@ Number_i のリリース応援 Web アプリ（非公式ファンサイト）の
 │       │       ├── migrations/ # D1 スキーマ
 │       │       └── seed/       # テストデータ
 │       └── wrangler.toml
+├── functions/
+│   └── api/[[route]].ts        # Pages Functions の入口（/api/* を apps/api に渡すだけ）
 ├── packages/
 │   └── shared/                 # web と api で共有する API の型（型のみ）
 ├── docs/
@@ -78,8 +80,12 @@ npm run dev:api
 # ビルド（フロントエンド）
 npm run build
 
-# D1 マイグレーション（ローカル）
-cd apps/api && npx wrangler d1 migrations apply number-i-release --local
+# D1 マイグレーション・テストデータ投入（ローカル）
+npm run db:migrate -w apps/api
+npm run db:seed -w apps/api
+
+# 本番と同じ構成（Pages + Functions + D1）でローカル確認（http://localhost:8788、先に npm run build）
+npx wrangler pages dev apps/web/dist --port 8788 --d1 DB=5f498bb5-1787-408b-b2df-cb2c39208e1a --persist-to apps/api/.wrangler/state
 
 # 型チェック・Lint
 npm run typecheck

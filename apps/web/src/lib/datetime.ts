@@ -20,6 +20,19 @@ export function formatJst(iso: string): string {
   return jstFormatter.format(new Date(iso))
 }
 
+const jstDateFormatter = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  weekday: 'short',
+})
+
+/** 例：2026/10/15(木)。発売日のように時刻が要らない表示に使う */
+export function formatJstDate(iso: string): string {
+  return jstDateFormatter.format(new Date(iso))
+}
+
 export type Remaining = {
   isOver: boolean
   days: number
